@@ -14,6 +14,7 @@ define('DB_DBNAME', 'sheep');
 # autoloader
 require __DIR__ . '/library/helpers.php';
 require __DIR__ . '/controllers/front_controller.php';
+require __DIR__ . '/controllers/back_controller.php';
 
 # request
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);

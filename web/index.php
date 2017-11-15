@@ -18,9 +18,9 @@ if ('/' === $uri) {
 		header('Location: /');
 		exit;
 	}
-	else{
-		echo "Bravo vous êtes connecté";
-	}
+
+	dashboard();
+	
 }
 else {
     header('HTTP/1.1 404 Not Found');

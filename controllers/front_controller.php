@@ -6,7 +6,8 @@ function index(){
 
 function auth(){
 
-    $pdo = get_pdo(); // dans le helper
+	$pdo = get_pdo(); // dans le helper
+	
     $flagToken = false;
 	$token = $_POST['token'];
 	if ( !empty($token) ) {
