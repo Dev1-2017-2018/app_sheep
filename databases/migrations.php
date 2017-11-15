@@ -59,6 +59,7 @@ $spends ="CREATE TABLE `spends`(
     `title` VARCHAR(100) NOT NULL,
     `description` TEXT NULL DEFAULT NULL,
     `price`DECIMAL(7,2) NULL DEFAULT NULL,
+    `pay_date` DATETIME NULL DEFAULT NULL,
     `status` ENUM('in progress', 'canceled', 'paid') NOT NULL DEFAULT 'in progress',
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
@@ -124,7 +125,7 @@ for ($i=0; $i < 4; $i++) {
 
 $prepare = null;
 // spends 
-$prepareSpend = $pdo->prepare('INSERT INTO `spends` (`title`, `description`, `price`, `status`) VALUES (?, ?, ?, ?) ');
+$prepareSpend = $pdo->prepare('INSERT INTO `spends` (`title`, `description`, `price`, `pay_date`, `status`) VALUES (?, ?, ?, ?, ?) ');
 
 for ($i=0; $i < 30; $i++) {
 
@@ -133,8 +134,13 @@ for ($i=0; $i < 30; $i++) {
     $prepareSpend->bindValue(2, $faker->text, PDO::PARAM_STR);
     $nbDec = rand(1,5) == 5 ? 4 : 2;
     $prepareSpend->bindValue(3, $faker->randomFloat($nbDec), PDO::PARAM_STR);
+
+    $t = 60*24*3600;
+    $d = rand(0,$t);
+    $prepareSpend->bindValue(4, date('Y-m-d h:i:s', time() - $d ));
+
     $status = rand(0,1)?  'in progress' : 'paid' ;
-    $prepareSpend->bindValue(4, $status, PDO::PARAM_STR);
+    $prepareSpend->bindValue(5, $status, PDO::PARAM_STR);
 
     $prepareSpend->execute();
 
