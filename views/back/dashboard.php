@@ -1,12 +1,29 @@
 <?php ob_start() ; ?>
-<section class="main dashboard">
-    <section class="graph grid-2"> 
-        <div>un div ou n'importe quoi d'autre</div>
-        <div>un div ou n'importe quoi d'autre</div>
+<?php include __DIR__ . '/../partials/nav.php'; ?>
+<section class="sheep_main dashboard">
+    <section class="sheep_graph grid-1"> 
+ 
+ 		<?php include  __DIR__ . '/../partials/graphic.php'; ?>
+    
     </section>
 
-    <section class="spending grid-1"> 
-        <div>un div ou n'importe quoi d'autre</div>
+    <section class="sheep_spending grid-1"> 
+        <?php if( $lastDepenses != false ) : ?>
+       	<ul>
+        	<?php foreach ($lastDepenses as $data) : ?>
+            	<li>Nom(s) <?php echo $data['names']; ?>, Prix : <?php echo $data['price']; ?>, date : <?php echo $data['pay_date']; ?></li>
+            <?php endforeach; ?>
+        </ul>
+       <?php else : ?>
+       	<p>Pas de dépenses pour l'instant </p>
+       <?php endif; ?>
+	
+	<ul>
+		<a href="/history">
+			Toutes les dépONSES
+		</a>
+	</ul>
+
     </section>
 
 </section>

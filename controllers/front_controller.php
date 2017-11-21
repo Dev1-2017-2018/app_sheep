@@ -57,14 +57,14 @@ function auth(){
 
     if ( $stmt  == false) {
 		// redirection avec message d'erreur
-		$_SESSION['message'] = "Une erreur dans le mot de passe ou email";
+		setFlashMessage("Erreur dans le mot de passe ou email");
 
 		header('Location: /');
 		exit;
 
     } else {
 		if( password_verify($sanitize['password'], $stmt['password']) )
-		{
+		{	
 			session_regenerate_id(true); // crée un nouvel identifiant
 			$_SESSION['auth'] = $stmt['id'];
 

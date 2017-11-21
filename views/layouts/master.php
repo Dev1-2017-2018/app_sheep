@@ -12,7 +12,7 @@
 </head>
 <body>
 <section class="flex-container-v">
-    <div class="center">
+    <div class="flex-item-center">
     <?php echo $content; ?>
     </div>
 </section>

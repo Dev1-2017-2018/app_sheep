@@ -20,28 +20,21 @@ function aleaUserIds($nbUser, $totalUser){
     return $ids;
 }
 
-// bootstrap PDO
-try{
+define('DB_HOST', 'localhost');
+define('DB_USER', 'root');
+define('DB_PASSWORD', 'root');
+define('DB_DBNAME', 'sheep');
 
-    $defaults = [
-        PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8",
-        PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+// bootstrap PDO
+  $defaults = [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, // PDO remonte les erreurs SQL, sinon il retourne une bête erreur PHP
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC // retournera les données dans un tableau associatifs
     ];
 
-    $pdo = new PDO(
-        $app['database']['dsn'],
-        $app['database']['user'],
-        $app['database']['pass'],
+    $pdo = new PDO('mysql:host='.DB_HOST.';dbname='.DB_DBNAME, 
+        DB_USER, DB_PASSWORD, 
         $defaults
     );
-
-    print_r($pdo);
-
-}catch(PDOException $e){
-    print('Error :' . $e->getMessage());
-    die;
-}
 
 $users ="CREATE TABLE `users`(
       `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -59,6 +52,7 @@ $spends ="CREATE TABLE `spends`(
     `title` VARCHAR(100) NOT NULL,
     `description` TEXT NULL DEFAULT NULL,
     `price`DECIMAL(7,2) NULL DEFAULT NULL,
+    `pay_date` DATETIME NULL DEFAULT NULL,
     `status` ENUM('in progress', 'canceled', 'paid') NOT NULL DEFAULT 'in progress',
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
@@ -68,6 +62,7 @@ $user_spend ="CREATE TABLE `user_spend`(
       `user_id` INT UNSIGNED NOT NULL,
       `spend_id` INT UNSIGNED NOT NULL,
       `price` DECIMAL(7,2) NULL DEFAULT NULL,
+      
   KEY `user_spend_user_id_foreign` (`user_id`),
   KEY `user_spend_spend_id_foreign` (`spend_id`),
   CONSTRAINT `user_spend_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
@@ -114,7 +109,7 @@ $pdo->exec($user_spend)  ;
 // users seeders
 $prepare = $pdo->prepare('INSERT INTO `users` (`name`, `email`, `password`) VALUES (?, ?, ?) ');
 
-for ($i=0; $i < 4; $i++) {
+for ($i=0; $i < 10; $i++) {
     $prepare->bindValue(1, $faker->name, PDO::PARAM_STR);
     $prepare->bindValue(2, $faker->unique()->email, PDO::PARAM_STR);
     $prepare->bindValue(3, 'admin', PDO::PARAM_STR);
@@ -124,7 +119,7 @@ for ($i=0; $i < 4; $i++) {
 
 $prepare = null;
 // spends 
-$prepareSpend = $pdo->prepare('INSERT INTO `spends` (`title`, `description`, `price`, `status`) VALUES (?, ?, ?, ?) ');
+$prepareSpend = $pdo->prepare('INSERT INTO `spends` (`title`, `description`, `price`, `status`, `pay_date`) VALUES (?, ?, ?, ?, ?) ');
 
 for ($i=0; $i < 30; $i++) {
 
@@ -135,6 +130,10 @@ for ($i=0; $i < 30; $i++) {
     $prepareSpend->bindValue(3, $faker->randomFloat($nbDec), PDO::PARAM_STR);
     $status = rand(0,1)?  'in progress' : 'paid' ;
     $prepareSpend->bindValue(4, $status, PDO::PARAM_STR);
+
+    $t = 60*24*3600;
+    $d = rand(0,$t);
+    $prepareSpend->bindValue(5, date('Y-m-d h:i:s', time() - $d ));
 
     $prepareSpend->execute();
 
@@ -170,7 +169,7 @@ for ($i=0; $i < 30; $i++) {
             $prepareUser_spend->bindValue(1,$ids[$i]);
             $prepareUser_spend->bindValue(2,$depend['id']);
             $prepareUser_spend->bindValue(3, $priceUser);
-            
+           
             $prepareUser_spend->execute(); // pour insérer effectivement
         }
     
@@ -179,7 +178,7 @@ for ($i=0; $i < 30; $i++) {
         $prepareUser_spend->bindValue(1, rand(1, $totalUser));
         $prepareUser_spend->bindValue(2,$depend['id']);
         $prepareUser_spend->bindValue(3, $depend['price']);
-
+      
         $prepareUser_spend->execute(); // pour insérer effectivement
     }
  }
@@ -198,3 +197,9 @@ print_r($t1);
 print_r($t2);
 
 $errors = print_r($t1['total']-$t2['total']);
+
+
+$group_spends = $pdo->query('SELECT u.name, GROUP_CONCAT("mot" SEPARATOR " ") FROM users AS u');
+$group_spends1 = $group_spends->fetchAll();
+
+echo $group_spends1;

@@ -10,7 +10,7 @@ function getFlashMessage()
         throw new RuntimeException("Attention les sessions ne marche pas sur votre site");
     }
 
-    if (!empty($_SESSION['flash'])) {
+    if (isset($_SESSION['flash'])) {
             $message = sprintf('<div class="info">
                 <strong class="%s">%s</strong>
                 </div>', 
@@ -28,7 +28,7 @@ function setFlashMessage($message, $type = 'success')
     if( !isset($_SESSION) ) {
         throw new RuntimeException("Attention les sessions ne marche pas sur votre site");
     }
-
+    
     $_SESSION['flash'] = [
         'message' => $message,
         'type'    => $type

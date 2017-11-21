@@ -21,8 +21,25 @@ if ('/' === $uri) {
 
 	dashboard();
 	
+} elseif ( $uri == '/history' || $uri == '/history/') {
+	if( !isset($_SESSION['auth']) ){
+		$_SESSION['message'] = "Vous n'avez pas l'autorisation";
+		
+		header('Location: /');
+		exit;
+	}
+	history();
+} elseif ( $uri = '/logout') {
+	if( !isset($_SESSION['auth']) ){
+		$_SESSION['message'] = "Vous n'avez pas l'autorisation";
+		
+		header('Location: /');
+		exit;
+	}
+	logout();
 }
 else {
     header('HTTP/1.1 404 Not Found');
+    echo $uri;
     echo '<html><body><h1>Page Not Found</h1></body></html>';
 }
