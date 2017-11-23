@@ -29,7 +29,7 @@ if ('/' === $uri) {
 		exit;
 	}
 	history();
-} elseif ( $uri = '/logout') {
+} elseif ( $uri == '/logout') {
 	if( !isset($_SESSION['auth']) ){
 		$_SESSION['message'] = "Vous n'avez pas l'autorisation";
 		
@@ -37,6 +37,30 @@ if ('/' === $uri) {
 		exit;
 	}
 	logout();
+} elseif ( $uri == '/add_spend') {
+	if( !isset($_SESSION['auth']) ){
+		$_SESSION['message'] = "Vous n'avez pas l'autorisation";
+		
+		header('Location: /');
+		exit;
+	}
+	add_spend();
+} elseif ( $uri == '/spend_added') {
+	if( !isset($_SESSION['auth']) ){
+		$_SESSION['message'] = "Vous n'avez pas l'autorisation";
+		
+		header('Location: /');
+		exit;
+	}
+	insert_spend();
+} elseif ( $uri == '/balance'){
+	if( !isset($_SESSION['auth']) ){
+		$_SESSION['message'] = "Vous n'avez pas l'autorisation";
+		
+		header('Location: /');
+		exit;
+	}
+	balance();
 }
 else {
     header('HTTP/1.1 404 Not Found');

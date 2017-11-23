@@ -16,6 +16,9 @@ require __DIR__ . '/library/helpers.php';
 require __DIR__ . '/controllers/front_controller.php';
 require __DIR__ . '/controllers/back_controller.php';
 require __DIR__ . '/model/spend_model.php';
+require __DIR__ . '/model/user_model.php';
+require __DIR__ . '/model/balance_model.php';
+
 
 # request
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);

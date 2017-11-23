@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="/assets/css/grillade.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/datetimepicker.min.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="/assets/api/datetimepicker.min.js"></script>
     <title>Sheep</title>
 </head>
 <body>

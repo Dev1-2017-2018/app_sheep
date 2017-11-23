@@ -107,37 +107,3 @@ function getSpendByUser(int $id){
 
  	return $spended[0]['value_s_price'];
  }
-
-function whereAnd(array $args){
-	
-    
-    global $pdo;
-    
-    $w = ' WHERE 1 = 1 ';
-    
-    foreach($args as $name => $val ){
-    
-    	$w .= " AND $name = {$pdo->quote($val) }";
-    
-    }
-    
-    return $w;
-    
-    
-
-}
-
-
-function limit($offset = 0, $limit = 10){
-	
-	return " LIMIT $offset, $limit ";
-
-}
-
-
-
-function order(string $order){
-
-	return " ORDER BY $order ";
-
-}

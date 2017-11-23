@@ -88,7 +88,7 @@ $balances ="CREATE TABLE `balances`(
     `priceDebit`  DECIMAL(7,2) NOT NULL,
     `priceCredit`  DECIMAL(7,2) NOT NULL,
     PRIMARY KEY (`id`),
-    CONSTRAINT `parts_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+    CONSTRAINT `balance_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 ";
 
@@ -101,10 +101,13 @@ $pdo->exec("DROP TABLE IF EXISTS balances");
 $pdo->exec("DROP TABLE IF EXISTS users");
 $pdo->exec("DROP TABLE IF EXISTS spends");
 
-$pdo->exec($users) ;
-$pdo->exec($spends) ;
-$pdo->exec($parts) ;
-$pdo->exec($user_spend)  ;
+$pdo->exec($spends);
+$pdo->exec($users);
+
+$pdo->exec($balances);
+$pdo->exec($parts);
+$pdo->exec($user_spend);
+
 
 // users seeders
 $prepare = $pdo->prepare('INSERT INTO `users` (`name`, `email`, `password`) VALUES (?, ?, ?) ');
@@ -182,6 +185,8 @@ for ($i=0; $i < 30; $i++) {
         $prepareUser_spend->execute(); // pour insérer effectivement
     }
  }
+
+ $prepareParts = $pdo->prepare('INSERT INTO `parts` (`user_id`, `day`, `started`) VALUES (?, ?, ?) ');
  
  $prepareUser_spend = null;
  $queryDepend = null;
